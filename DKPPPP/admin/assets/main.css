@@ -1,0 +1,53 @@
+        /* CSS Box Section yang Disesuaikan */
+        .box-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            height: 60vh;
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+            padding: 0 10px;
+        }
+
+        .box {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            width: 220px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .box a.title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .box a.title:hover {
+            color: #007bff;
+        }
+
+        .box-content {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* CSS khusus untuk mengontrol ukuran canvas */
+        .myChart {
+            max-width: 250px;
+            max-height: 250px;
+            margin: auto;
+        }
