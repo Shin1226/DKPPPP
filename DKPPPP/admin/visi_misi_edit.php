@@ -51,6 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <!-- Theme Quill.js -->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -235,32 +237,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               </div>
               <div class="form-group">
                 <label>Judul</label>
-                <div id="judul-editor" style="height: 100px;"></div>
-                <input type="hidden" name="judul" id="judul">
+                <textarea id="judul" name="judul"><?= $data['judul'] ?></textarea>
               </div>
               <div class="form-group">
                 <label>Deskripsi</label>
-                <div id="deskripsi-editor" style="height: 150px;"></div>
-                <input type="hidden" name="deskripsi" id="deskripsi">
+                <textarea id="deskripsi" name="deskripsi"><?= $data['deskripsi'] ?></textarea>
               </div>
-              <script>
-                var quillJudul = new Quill('#judul-editor', {
-                  theme: 'snow'
-                });
-                var quillDeskripsi = new Quill('#deskripsi-editor', {
-                  theme: 'snow'
-                });
-
-                document.querySelector('form').onsubmit = function() {
-                  document.querySelector('#judul').value = quillJudul.root.innerHTML;
-                  document.querySelector('#deskripsi').value = quillDeskripsi.root.innerHTML;
-                };
-              </script>
-              <script>
-                quillJudul.clipboard.dangerouslyPasteHTML(<?= json_encode($data['judul']) ?>);
-                quillDeskripsi.clipboard.dangerouslyPasteHTML(<?= json_encode($data['deskripsi']) ?>);
-              </script>
-
               <button type="submit" class="btn btn-primary">Simpan</button>
             </form>
           </div>
@@ -289,6 +271,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
   </footer>
 
+  <script>
+    $(document).ready(function() {
+      $('#judul').summernote({
+        placeholder: 'Write your content here...',
+        tabsize: 2,
+        height: 300, // Tinggi editor dalam pixel
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'italic', 'underline', 'clear']],
+          ['fontsize', ['fontsize']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['height', ['height']],
+          ['insert', ['picture', 'link', 'video']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+      });
+      $('#deskripsi').summernote({
+        placeholder: 'Write your content here...',
+        tabsize: 2,
+        height: 300, // Tinggi editor dalam pixel
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'italic', 'underline', 'clear']],
+          ['fontsize', ['fontsize']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['height', ['height']],
+          ['insert', ['picture', 'link', 'video']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+      });
+    });
+  </script>
+
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
@@ -303,6 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- AdminLTE App -->
   <script src="assets/dist/js/adminlte.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
 
 </body>
 

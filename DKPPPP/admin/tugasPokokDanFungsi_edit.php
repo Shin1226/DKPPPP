@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   <!-- Theme style -->
   <link rel="stylesheet" href="assets/dist/css/adminlte.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -228,7 +230,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               </div>
               <div class="form-group">
                 <label>Deskripsi</label>
-                <textarea name="deskripsi" class="form-control" required><?php echo $data['deskripsi']; ?></textarea>
+                <!-- <textarea name="deskripsi" class="form-control" required><?php echo $data['deskripsi']; ?></textarea> -->
+                <textarea id="deskripsi" name="deskripsi" required=""><?php echo $data['deskripsi']; ?></textarea>
               </div>
               <button type="submit" class="btn btn-primary">Simpan</button>
             </form>
@@ -259,6 +262,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </aside>
     <!-- /.control-sidebar -->
   </div>
+      <script>
+      $(document).ready(function() {
+        $('#deskripsi').summernote({
+          placeholder: 'Masukan deskripsi...',
+          tabsize: 2,
+          height: 300, // Tinggi editor dalam pixel
+          toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['insert', ['picture', 'link', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+          ]
+        });
+      });
+    </script>
   <!-- ./wrapper -->
 
   <!-- jQuery -->
@@ -267,7 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- AdminLTE App -->
   <script src="assets/dist/js/adminlte.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
 </body>
 
 </html>

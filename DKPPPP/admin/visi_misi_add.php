@@ -42,6 +42,13 @@ $result = $conn->query($sql);
   <!-- Theme Quill.js -->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -223,38 +230,12 @@ $result = $conn->query($sql);
               </div>
               <div class="form-group">
                 <label>Judul</label>
-                <div id="judul-editor" style="height: 100px;"></div>
-                <input type="hidden" name="judul" id="judul" placeholder="Isi Judul" required>
+                <textarea id="judul" name="judul"></textarea>
               </div>
-              <script>
-                // Inisialisasi Quill untuk elemen judul
-                var quill = new Quill('#judul-editor', {
-                  theme: 'snow'
-                });
-
-                // Saat form di-submit, ambil data dari Quill dan simpan di input hidden
-                document.querySelector('form').onsubmit = function() {
-                  document.querySelector('#judul').value = quill.root.innerHTML;
-                };
-              </script>
               <div class="form-group">
                 <label>Deskripsi</label>
-                <div id="deskripsi-editor" style="height: 150px;"></div>
-                <input type="hidden" name="deskripsi" id="deskripsi" placeholder="Isi Deskripsi" required>
+                <textarea id="deskripsi" name="deskripsi"></textarea>
               </div>
-
-              <script>
-                // Inisialisasi Quill untuk elemen deskripsi
-                var quillDeskripsi = new Quill('#deskripsi-editor', {
-                  theme: 'snow'
-                });
-
-                // Saat form di-submit, ambil data dari Quill dan simpan di input hidden
-                document.querySelector('form').onsubmit = function() {
-                  document.querySelector('#judul').value = quillJudul.root.innerHTML;
-                  document.querySelector('#deskripsi').value = quillDeskripsi.root.innerHTML;
-                };
-              </script>
               <button type="submit" class="btn btn-primary">Simpan</button>
             </form>
           </div>
@@ -280,6 +261,42 @@ $result = $conn->query($sql);
     </aside>
   </div>
 
+
+<script>
+  $(document).ready(function() {
+    $('#judul').summernote({
+      placeholder: 'Masukan judul...',
+      tabsize: 2,
+      height: 300, // Tinggi editor dalam pixel
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        ['fontsize', ['fontsize']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['height', ['height']],
+        ['insert', ['picture', 'link', 'video']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ]
+    });
+    $('#deskripsi').summernote({
+      placeholder: 'Masukan deskripsi...',
+      tabsize: 2,
+      height: 300, // Tinggi editor dalam pixel
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        ['fontsize', ['fontsize']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['height', ['height']],
+        ['insert', ['picture', 'link', 'video']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ]
+    });
+  });
+</script>
+
   <!-- jQuery -->
   <script src="assets/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
@@ -287,6 +304,9 @@ $result = $conn->query($sql);
   <!-- AdminLTE App -->
   <script src="assets/dist/js/adminlte.min.js"></script>
 
+  <!-- jQuery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
 </body>
 
 </html>

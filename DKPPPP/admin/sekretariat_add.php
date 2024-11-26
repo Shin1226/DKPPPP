@@ -43,6 +43,9 @@ $result = $conn->query($sql);
   <!-- Theme Quill.js -->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -219,7 +222,7 @@ $result = $conn->query($sql);
               </div>
               <div class="form-group">
                 <label>Deskripsi</label>
-                <textarea name="deskripsi" class="form-control" placeholder="Isi Deskripsi" required></textarea>
+                <textarea id="deskripsi" name="deskripsi" required=""></textarea>
               </div>
               <button type="submit" class="btn btn-primary">Simpan</button>
             </form>
@@ -241,6 +244,26 @@ $result = $conn->query($sql);
       </div>
     </footer>
 
+    <script>
+      $(document).ready(function() {
+        $('#deskripsi').summernote({
+          placeholder: 'Masukan deskripsi...',
+          tabsize: 2,
+          height: 300, // Tinggi editor dalam pixel
+          toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['insert', ['picture', 'link', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+          ]
+        });
+      });
+    </script>
+
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
     </aside>
@@ -252,6 +275,8 @@ $result = $conn->query($sql);
   <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- AdminLTE App -->
   <script src="assets/dist/js/adminlte.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
 
 </body>
 
