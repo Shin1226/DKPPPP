@@ -208,7 +208,7 @@ $result = $conn->query($sql);
                                         <tr>
                                             <td><?= htmlspecialchars($row['id']) ?></td>
                                             <td><?= htmlspecialchars($row['judul']) ?></td>
-                                            <td><?= htmlspecialchars($row['deskripsi']) ?></td>
+                                            <td><?= $row['deskripsi'] ?></td>
                                             <td>
                                                 <a href="bidang_ketahanan_pangan_edit.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
                                                 <a href="bidang_ketahanan_pangan_delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus ini?');">Hapus</a>

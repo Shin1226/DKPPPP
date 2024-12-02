@@ -132,35 +132,37 @@ $result_news = $conn->query($sql);
                         <div class="container">
                             <div class="row gy-4">
                                 <?php while ($row = $result_news->fetch_assoc()) { ?>
-                                    <div class="col-lg-12">
-                                        <article>
-                                            <div class="post-img">
-                                                <img src="admin/uploads/berita/<?php echo $row['gambar']; ?>" alt="" class="img-fluid">
+                                    <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+                                        <div class="card h-100 shadow-sm border-0">
+                                            <div class="card-img-top">
+                                                <img src="admin/uploads/berita/<?php echo $row['image_path']; ?>" alt="" class="img-fluid rounded">
                                             </div>
-                                            <h2 class="title">
-                                                <a><?= $row['judul']; ?></a>
-                                            </h2>
-                                            <!-- Informasi Kategori dan Tanggal -->
-                                            <div class="post-meta" style="display: flex; align-items: center; color: #999; font-size: 14px; margin-bottom: 10px;">
-                                                <span class="kategori" style="margin-right: 15px;">
-                                                    <i class="bi bi-folder"></i> <?= $row['kategori']; ?>
-                                                </span>
-                                                <span class="tanggal">
-                                                    <i class="bi bi-calendar"></i> <?= date('d M Y', strtotime($row['date'])); ?>
-                                                </span>
-                                            </div>
-                                            <div class="content">
-                                                <p><?php echo substr($row['text'], 0, 100); ?>...</p>
-                                                <div class="card-footer bg-transparent border-0">
-                                                    <a href="<?= $row['link'] ?>" target="_blank" class="btn btn-sm btn-primary">Baca Selengkapnya</a>
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <a href="detail-berita.php?id=<?= $row['id']; ?>">
+                                                        <?= htmlspecialchars($row['title']); ?>
+                                                    </a>
+                                                </h5>
+                                                <!-- Informasi Kategori dan Tanggal -->
+                                                <div class="post-meta" style="display: flex; align-items: center; color: #999; font-size: 14px; margin-bottom: 10px;">
+                                                    <span class="tanggal">
+                                                        <i class="bi bi-calendar"></i> <?= date('d M Y', strtotime($row['created_at'])); ?>
+                                                    </span>
                                                 </div>
+                                                <!-- Tampilkan 100 karakter pertama dari content -->
+                                                <p class="card-text text-muted">
+                                                    <?= htmlspecialchars(substr(strip_tags($row['content']), 0, 100)); ?>...
+                                                </p>
                                             </div>
-                                        </article>
-                                    </div><!-- End Postingan Berita item -->
+                                            <div class="card-footer bg-transparent border-0">
+                                                <a href="detail-berita.php?id=<?= $row['id']; ?>">Lihat Detail</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 <?php } ?>
-                            </div><!-- End Postingan Berita list -->
+                            </div>
                         </div>
-                    </section><!-- /Postingan Berita Section -->
+                    </section>
 
                     <!-- Penomoran Berita Section -->
                     <section id="berita-pagination" class="berita-pagination section">
@@ -229,7 +231,6 @@ $result_news = $conn->query($sql);
                                 <?php } ?>
                             </ul>
                         </div><!--/Categories Widget -->
-
                     </div>
                 </div>
             </div>

@@ -6,8 +6,8 @@ $sql_gallery = "SELECT * FROM gallery ORDER BY id DESC";
 $result_gallery = $conn->query($sql_gallery);
 
 // Ambil data dari tabel news
-$sql_news = "SELECT * FROM news ORDER BY id DESC";
-$result_news = $conn->query($sql_news);
+$sql = "SELECT * FROM news ORDER BY created_at DESC LIMIT 2";
+$result_news = $conn->query($sql);
 
 // Ambil data dari tabel beranda
 $sql_beranda = "SELECT * FROM beranda WHERE status = 'aktif' ORDER BY urutan ASC";
@@ -220,48 +220,47 @@ $result_client = $conn->query($sql_client);
     </section>
     <!-- End Clients Section -->
 
-    <!-- Berita Section -->
-    <section id="berita" class="berita section">
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Berita</h2>
-        <p>DKPPPP</p>
-      </div>
-      <!-- End Section Title -->
-      <div class="container">
-        <div class="row gy-4">
-          <?php while ($row = $result_news->fetch_assoc()) { ?>
-            <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-              <div class="card h-100 shadow-sm border-0">
-                <div class="card-img-top">
-                  <img src="admin/uploads/berita/<?php echo $row['gambar']; ?>" alt="" class="img-fluid rounded">
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">
-                    <a href="<?= $row['link'] ?>" target="_blank" class="text-dark text-decoration-none">
-                      <?= $row['judul']; ?>
-                    </a>
-                  </h5>
-                  <p class="card-text text-muted"><?php echo substr($row['text'], 0, 100); ?>...</p>
-                  <!-- Informasi Kategori dan Tanggal -->
-                  <div class="post-meta" style="display: flex; align-items: center; color: #999; font-size: 14px; margin-bottom: 10px;">
-                    <span class="kategori" style="margin-right: 15px;">
-                      <i class="bi bi-folder"></i> <?= $row['kategori']; ?>
-                    </span>
-                    <span class="tanggal">
-                      <i class="bi bi-calendar"></i> <?= date('d M Y', strtotime($row['date'])); ?>
-                    </span>
-                  </div>
-                </div>
-                <div class="card-footer bg-transparent border-0">
-                  <a href="<?= $row['link'] ?>" target="_blank" class="btn btn-sm btn-primary">Baca Selengkapnya</a>
-                </div>
-              </div>
+<!-- Berita Section -->
+<section id="berita" class="berita section">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Berita</h2>
+    <p>DKPPPP</p>
+  </div>
+  <!-- End Section Title -->
+  <div class="container">
+  <div class="row gy-4">
+    <?php while ($row = $result_news->fetch_assoc()) { ?>
+      <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-img-top">
+            <img src="admin/uploads/berita/<?php echo $row['image_path']; ?>" alt="" class="img-fluid rounded">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="detail-berita.php?id=<?= $row['id']; ?>">
+                <?= htmlspecialchars($row['title']); ?>
+              </a>
+            </h5>
+            <!-- Informasi Kategori dan Tanggal -->
+            <div class="post-meta" style="display: flex; align-items: center; color: #999; font-size: 14px; margin-bottom: 10px;">
+              <span class="tanggal">
+                <i class="bi bi-calendar"></i> <?= date('d M Y', strtotime($row['created_at'])); ?>
+              </span>
             </div>
-          <?php } ?>
+            <!-- Tampilkan 100 karakter pertama dari content -->
+            <p class="card-text text-muted">
+              <?= htmlspecialchars(substr(strip_tags($row['content']), 0, 100)); ?>...
+            </p>
+          </div>
+          <div class="card-footer bg-transparent border-0">
+            <a href="detail-berita.php?id=<?= $row['id']; ?>">Lihat Detail</a>
+          </div>
         </div>
       </div>
-    </section>
-
+    <?php } ?>
+  </div>
+</div>
+</section>
 
     <!-- Gambar Section -->
     <section id="galeri" class="galeri section">

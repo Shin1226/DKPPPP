@@ -209,7 +209,8 @@ $result = $conn->query($sql);
                 <?php while ($row = $result->fetch_assoc()) : ?>
                   <tr>
                     <td><?php echo $row['title']; ?></td>
-                    <td><?php echo substr(strip_tags($row['content']), 0, 100) . '...'; ?></td>
+                    <td><?php echo $row['content']?></td>
+                    <!-- <td><?php echo substr(strip_tags($row['content']), 0, 100) . '...'; ?></td> -->
                     <td><?php echo $row['created_at']; ?></td>
                     <td>
                       <a href="news_edit.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>

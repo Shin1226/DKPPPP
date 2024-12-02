@@ -209,7 +209,7 @@ $result = $conn->query($sql);
                     <tr>
                       <td><?= htmlspecialchars($row['id']) ?></td>
                       <td><?= htmlspecialchars($row['judul']) ?></td>
-                      <td><?= htmlspecialchars($row['deskripsi']) ?></td>
+                      <td><?= $row['deskripsi'] ?></td>
                       <td><?= htmlspecialchars($row['tipe']) ?></td>
                       <td>
                         <a href="tugasPokokDanFungsi_edit.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Edit</a>

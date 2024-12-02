@@ -209,7 +209,7 @@ $result = $conn->query($sql);
                     <tr>
                       <td><?= htmlspecialchars($row['id']) ?></td>
                       <td><?= htmlspecialchars($row['judul']) ?></td>
-                      <td><?= htmlspecialchars($row['deskripsi']) ?></td>
+                      <td><?= $row['deskripsi'] ?></td>
                       <td>
                         <?php if (!empty($row['link'])): ?>
                           <a href="<?= htmlspecialchars($row['link']) ?>" target="_blank">Baca Selengkapnya</a>

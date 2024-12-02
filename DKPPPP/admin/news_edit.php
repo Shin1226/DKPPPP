@@ -14,19 +14,31 @@ $data = $result->fetch_assoc();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $title = $_POST['title'];
   $content = $_POST['content'];
-  $link = $_POST['link'];
+  // $link = $_POST['link'];
 
   // Cek jika ada gambar yang diunggah
   if ($_FILES['gambar']['name']) {
-    $image_path = $_FILES['gambar']['name'];
-    $target = "uploads/berita/" . basename($image_path);
+    $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+    $file_extension = strtolower(pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION));
+
+    if (!in_array($file_extension, $allowed_extensions)) {
+      die("Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.");
+    }
+
+    if ($_FILES['gambar']['size'] > 5 * 1024 * 1024) {
+      die("File size exceeds the 5 MB limit.");
+    }
+
+    $image_path = uniqid() . '.' . $file_extension;
+    $target = "uploads/berita/" . $image_path;
     move_uploaded_file($_FILES['gambar']['tmp_name'], $target);
   } else {
     $image_path = $data['image_path'];
   }
 
+
   // Update data ke database
-  $sql = "UPDATE news SET title='$title', image_path='$image_path', content='$content', link='$link' WHERE id='$id'";
+  $sql = "UPDATE news SET title='$title', image_path='$image_path', content='$content' WHERE id='$id'";
   if ($conn->query($sql) === TRUE) {
     header("Location: manajemenberita.php");
   } else {
@@ -51,6 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   <!-- Theme style -->
   <link rel="stylesheet" href="assets/dist/css/adminlte.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -224,21 +238,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <div class="card-body">
             <form method="post" enctype="multipart/form-data">
               <div class="form-group">
-                <label>Judul</label>
-                <input type="text" name="title" class="form-control" value="<?php echo $data['title']; ?>" required>
-              </div>
-              <div class="form-group">
-                <label>Gambar</label>
-                <input type="file" name="gambar" class="form-control">
-                <?php if (!empty($data['image_path'])): ?>
-                  <img src="uploads/berita/<?php echo $data['image_path']; ?>" width="100">
-                <?php endif; ?>
-              </div>
-              <div class="form-group">
-                <label>Isi Berita</label>
-                <textarea name="content" class="form-control" required><?php echo $data['content']; ?></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Simpan</button>
+                <div class="form-group">
+                  <label>Judul Berita</label>
+                  <input type="text" name="title" class="form-control" value="<?php echo $data['title']; ?>" required>
+                </div>
+                <div class="form-group">
+                  <label>Isi Berita</label>
+                  <!-- <textarea name="content" class="form-control" required></textarea> -->
+                  <textarea id="deskripsi" name="content" required=""><?php echo $data['content']; ?></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
             </form>
           </div>
           <!-- /.card-body -->
@@ -266,6 +275,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- /.control-sidebar -->
   </div>
   <!-- ./wrapper -->
+  <script>
+    $(document).ready(function() {
+      $('#deskripsi').summernote({
+        placeholder: 'Masukan deskripsi...',
+        tabsize: 2,
+        height: 300,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'italic', 'underline', 'clear']],
+          ['fontsize', ['fontsize']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['height', ['height']],
+          ['insert', ['picture', 'link', 'video']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ],
+        callbacks: {
+          onImageUpload: function(files) {
+            uploadImage(files[0]);
+          }
+        }
+      });
+
+      function uploadImage(file) {
+        var data = new FormData();
+        data.append("file", file);
+
+        $.ajax({
+          url: 'upload_image.php', // Endpoint upload
+          method: 'POST',
+          data: data,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            var result = JSON.parse(response);
+            if (result.url) {
+              $('#deskripsi').summernote('insertImage', result.url);
+            } else {
+              alert(result.error);
+            }
+          },
+          error: function() {
+            alert("Error uploading file.");
+          }
+        });
+      }
+    });
+  </script>
 
   <!-- jQuery -->
   <script src="assets/plugins/jquery/jquery.min.js"></script>
@@ -273,6 +330,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- AdminLTE App -->
   <script src="assets/dist/js/adminlte.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
 
 </body>
 

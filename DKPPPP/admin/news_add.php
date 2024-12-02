@@ -9,23 +9,24 @@ include 'config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $title = $_POST['title'];
   $content = $_POST['content'];
-  $link = $_POST['link'];
+  // $link = $_POST['link'];
 
-  // Proses upload gambar
-  $image_path = $_FILES['gambar']['name'];
-  $target = "uploads/berita/" . basename($image_path);
-  move_uploaded_file($_FILES['gambar']['tmp_name'], $target);
+  // Cek jika ada gambar yang diunggah
+  if ($_FILES['gambar']['name']) {
+    $image_path = $_FILES['gambar']['name'];
+    $target = "uploads/berita/" . basename($image_path);
+    move_uploaded_file($_FILES['gambar']['tmp_name'], $target);
+  } else {
+    $image_path = $data['image_path'];
+  }
 
-  // Simpan data ke database
-  $sql = "INSERT INTO news (title, image_path, content, link) VALUES ('$title', '$image_path', '$content', '$link')";
+  // Update data ke database
+  $sql = "INSERT INTO news (title,image_path,content) VALUES ('" . $title . "','" . $image_path . "','" . $content . "')";
   if ($conn->query($sql) === TRUE) {
     header("Location: manajemenberita.php");
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
-}
-?>
-
 }
 ?>
 
@@ -45,19 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   <!-- Theme style -->
   <link rel="stylesheet" href="assets/dist/css/adminlte.min.css">
-
-  <!-- jQuery dan Popper.js -->
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-
-  <!-- Bootstrap CSS dan JS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-  <!-- Summernote CSS dan JS -->
-  <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.js"></script>
-
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -223,87 +213,95 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       <!-- Main content -->
       <section class="content">
-
         <!-- Default box -->
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Tambah Berita</h3>
           </div>
-          <div class="form-group">
-            <label for="title">Judul Berita:</label>
-            <input type="text" class="form-control" id="title" name="title" required>
+          <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+              <div class="form-group">
+                <label>Judul Berita</label>
+                <input type="text" name="title" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Isi Berita</label>
+                <!-- <textarea name="content" class="form-control" required></textarea> -->
+                <textarea id="deskripsi" name="content" required=""></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </form>
           </div>
-          <div class="form-group">
-            <label for="content">Isi Berita:</label>
-            <div id="summernote"></div>
-            <input type="hidden" id="content" name="content">
-          </div>
-          <!-- Inisialisasi Summernote dan Pengaturan Upload Gambar -->
-          <script>
-            $(document).ready(function() {
-              $('#summernote').summernote({
-                placeholder: 'Masukkan isi berita di sini',
-                tabsize: 2,
-                height: 300,
-                callbacks: {
-                  onImageUpload: function(files) {
-                    let data = new FormData();
-                    data.append("file", files[0]);
-                    $.ajax({
-                      url: 'upload_image.php',
-                      type: 'POST',
-                      data: data,
-                      contentType: false,
-                      processData: false,
-                      success: function(url) {
-                        $('#summernote').summernote('insertImage', url);
-                      }
-                    });
-                  }
-                }
-              });
-
-              // Simpan konten dari Summernote ke input hidden saat form disubmit
-              $('#newsForm').on('submit', function(e) {
-                e.preventDefault(); // Hindari submit default untuk testing
-                $('#content').val($('#summernote').summernote('code'));
-                console.log("Judul:", $('#title').val());
-                console.log("Konten:", $('#content').val());
-                // Submit form via AJAX atau proses lain jika diperlukan
-              });
-            });
-          </script>
-
-          <button type="submit" class="btn btn-primary">Simpan</button>
-          </form>
+          <!-- /.card-body -->
+          <div class="card-footer"></div>
+          <!-- /.card-footer-->
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
+        <!-- /.card -->
+      </section>
+      <!-- /.content -->
 
-        </div>
-        <!-- /.card-footer-->
     </div>
-    <!-- /.card -->
+    <!-- /.content-wrapper -->
 
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="container text-center mt-4">
+        <p>&copy; <strong>DKPPPP</strong> | 2024</p>
+      </div>
+    </footer>
 
-  <!-- Footer -->
-  <footer class="main-footer">
-    <div class="container text-center mt-4">
-      <p>&copy; <strong>DKPPPP</strong> | 2024</p>
-    </div>
-  </footer>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
   </div>
   <!-- ./wrapper -->
+  <script>
+    $(document).ready(function() {
+      $('#deskripsi').summernote({
+        placeholder: 'Masukan deskripsi...',
+        tabsize: 2,
+        height: 300, // Tinggi editor dalam pixel
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'italic', 'underline', 'clear']],
+          ['fontsize', ['fontsize']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['height', ['height']],
+          ['insert', ['picture', 'link', 'video']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ],
+        callbacks: {
+          onImageUpload: function(files) {
+            uploadImage(files[0]);
+          }
+        }
+      });
+    });
+
+    function uploadImage(file) {
+      var data = new FormData();
+      data.append("file", file);
+
+      $.ajax({
+        url: 'upload_image.php', // URL untuk meng-handle upload
+        method: 'POST',
+        data: data,
+        processData: false, // Jangan proses data otomatis
+        contentType: false, // Jangan set contentType, biarkan jQuery mengaturnya
+        success: function(response) {
+          // Insert gambar yang berhasil di-upload ke Summernote
+          $('#deskripsi').summernote('insertImage', response);
+        },
+        error: function() {
+          alert("Error uploading file");
+        }
+      });
+    }
+  </script>
+
 
   <!-- jQuery -->
   <script src="assets/plugins/jquery/jquery.min.js"></script>
@@ -311,6 +309,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- AdminLTE App -->
   <script src="assets/dist/js/adminlte.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
 
 </body>
 
